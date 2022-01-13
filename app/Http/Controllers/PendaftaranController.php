@@ -7,6 +7,7 @@ use App\Models\Keluhan;
 use App\Models\Pendaftaran;
 use App\Models\Ruang;
 use Illuminate\Http\Request;
+use Session;
 
 class PendaftaranController extends Controller
 {
@@ -31,6 +32,7 @@ class PendaftaranController extends Controller
         $keluhan = Keluhan::all();
         $ruang = Ruang::all();
         $jadwal = JadwalDokter::all();
+        $pendaftaran = Pendaftaran::all();
         return view('pendaftaran.create', compact('keluhan', 'ruang', 'jadwal'));
     }
 
@@ -48,24 +50,30 @@ class PendaftaranController extends Controller
             'id_keluhan' => 'required',
             'tanggal_daftar' => 'required',
             'no_telepon' => 'required',
-            'nama_dokter' => 'required',
+            'id_dokter' => 'required',
             'jk' => 'required',
             'jadwal_periksa' => 'required',
             'id_ruang' => 'required',
             'cara_bayar' => 'required',
         ]);
 
-        $pendaftaran = new Pendaftaran;
+        $pendaftaran = Pendaftaran::findOrFail($id);
+
         $pendaftaran->nama_pasien = $request->nama_pasien;
         $pendaftaran->id_keluhan = $request->id_keluhan;
         $pendaftaran->tanggal_daftar = $request->tanggal_daftar;
         $pendaftaran->no_telepon = $request->no_telepon;
-        $pendaftaran->nama_dokter = $request->nama_dokter;
+        $pendaftaran->id_dokter = $request->id_dokter;
         $pendaftaran->jk = $request->jk;
         $pendaftaran->jadwal_periksa = $request->jadwal_periksa;
         $pendaftaran->id_ruang = $request->id_ruang;
         $pendaftaran->cara_bayar = $request->cara_bayar;
         $pendaftaran->save();
+        Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Data saved successfully",
+        ]);
+
         return redirect()->route('pendaftaran.index');
     }
 
@@ -114,24 +122,29 @@ class PendaftaranController extends Controller
             'id_keluhan' => 'required',
             'tanggal_daftar' => 'required',
             'no_telepon' => 'required',
-            'nama_dokter' => 'required',
+            'id_dokter' => 'required',
             'jk' => 'required',
             'jadwal_periksa' => 'required',
             'id_ruang' => 'required',
             'cara_bayar' => 'required',
         ]);
 
-        $pendaftaran = new Pendaftaran;
+        $pendaftaran = Pendaftaran::findOrFail($id);
         $pendaftaran->nama_pasien = $request->nama_pasien;
         $pendaftaran->id_keluhan = $request->id_keluhan;
         $pendaftaran->tanggal_daftar = $request->tanggal_daftar;
         $pendaftaran->no_telepon = $request->no_telepon;
-        $pendaftaran->nama_dokter = $request->nama_dokter;
+        $pendaftaran->id_dokter = $request->id_dokter;
         $pendaftaran->jk = $request->jk;
         $pendaftaran->jadwal_periksa = $request->jadwal_periksa;
         $pendaftaran->id_ruang = $request->id_ruang;
         $pendaftaran->cara_bayar = $request->cara_bayar;
         $pendaftaran->save();
+        Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Data saved successfully",
+        ]);
+
         return redirect()->route('pendaftaran.index');
 
     }
